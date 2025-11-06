@@ -44,34 +44,26 @@ if not all([api_key, api_base, model_name]):
 
 API_URL = os.getenv("API_URL")
 API_KEY = os.getenv("API_KEY")
+API_BASE_URL = "https://api.cloudflare.com/client/v4/accounts/1db5d1059a3da11e28f027b8ba8a2f88/ai/run/"
+CLOUDFLARE_TOKEN = os.getenv("API_TOKEN")
 PART_USED = os.getenv("PART_USED")
 COURSE_ID = os.getenv("COURSE_ID")
 
 print(model_name)
 print(loading_folder)
 
-# --- OpenAI LLM Initialization ---
-llm = ChatOpenAI(
-    model_name=model_name,
-    openai_api_key=api_key,
-    openai_api_base=api_base,
-    max_tokens=None,
-    max_retries=2,
-    temperature=0.69,
-)
-
 # --- Function to Ask OpenAI ---
-def ask(request):
-    try:
-        response = llm.invoke(request)
-        return response
-    except Exception as e:
-        print(request)
-        raise RuntimeError(f"Error when calling openAI: {e}")
+headers = {"Authorization": f"Bearer {CLOUDFLARE_TOKEN}"}
+def ask(inputs):
+    input = { 
+                "input": inputs
+            }
+    response = requests.post(f"{API_BASE_URL}@cf/openai/gpt-oss-120b", headers=headers, json=input)
+    return response.json()
 
 # --- Prompt Loading ---
 prompt = None
-candidates = ["prompt.txt"]
+candidates = ["..\\..\\prompt.txt"]
 seen = set()
 candidates = [p for p in candidates if p and not (p in seen or seen.add(p))]
 
@@ -83,6 +75,9 @@ for p in candidates:
         break
 else:
     print("prompt.txt not found; prompt is None.")
+
+with open("..\\..\\prompt_check.txt", "r", encoding="utf-8") as _f:
+    prompt_check = _f.read()
 
 print(prompt)
 print(loading_folder)
@@ -108,7 +103,8 @@ for folder in loading_folder:
                     with open(alt_md_path, "r", encoding="utf-8") as f:
                         final_md_str = f.read()
             try:
-                response = ask(prompt + "\n\n" + final_md_str)
+                response = ask(prompt + "\n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
+                response = ask(prompt_check + "\n\n" + response + "\n\n --- \n\n **Sau đây là tài liệu gốc để đối chiếu** \n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
             except Exception as e:
                 print("error prompting file", final_md_path)
                 continue
