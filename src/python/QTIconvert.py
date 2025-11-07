@@ -45,13 +45,13 @@ if not all([api_key, api_base, model_name]):
 API_URL = os.getenv("API_URL")
 API_KEY = os.getenv("API_KEY")
 API_BASE_URL = "https://api.cloudflare.com/client/v4/accounts/1db5d1059a3da11e28f027b8ba8a2f88/ai/run/"
-CLOUDFLARE_TOKEN = os.getenv("API_TOKEN")
+CLOUDFLARE_TOKEN = os.getenv("CLOUDFLARE_TOKEN")
 PART_USED = os.getenv("PART_USED")
 COURSE_ID = os.getenv("COURSE_ID")
 
 print(model_name)
 print(loading_folder)
-
+print(CLOUDFLARE_TOKEN)
 # --- Function to Ask OpenAI ---
 headers = {"Authorization": f"Bearer {CLOUDFLARE_TOKEN}"}
 def ask(inputs):
@@ -102,11 +102,13 @@ for folder in loading_folder:
                 if os.path.exists(alt_md_path):
                     with open(alt_md_path, "r", encoding="utf-8") as f:
                         final_md_str = f.read()
-            try:
+            try: 
+                #print(ask("hi"))
+                print(ask)
                 response = ask(prompt + "\n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
-                response = ask(prompt_check + "\n\n" + response + "\n\n --- \n\n **Sau đây là tài liệu gốc để đối chiếu** \n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
+                #response = ask(prompt_check + "\n\n" + response + "\n\n --- \n\n **Sau đây là tài liệu gốc để đối chiếu** \n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
             except Exception as e:
-                print("error prompting file", final_md_path)
+                print("error prompting file", final_md_path, e)
                 continue
             out_dir = os.path.dirname(final_md_path)
             os.makedirs(out_dir, exist_ok=True)
