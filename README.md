@@ -18,6 +18,10 @@ python -m pip install -r requirements.txt
 
 File chính ở đây là `main.py`
 
+Trước hết bạn hãy đổi đường dẫn hoạt động:
+```
+cd src/python
+```
 Sau đó bạn hãy chạy lệnh này để auto-parse file .pdf thành file .md tổng quát:
 ```
 python main.py
@@ -26,7 +30,7 @@ Output của mỗi file pdf sẽ được lưu tại `<đường dẫn file>/<t�
 
 Nếu bạn muốn convert sang qti file thì bạn có thể chạy lệnh sau:
 ```
-python convert2qti.py
+python QTIconvert.py
 ```
 
 ## Chạy bằng Jupyter Notebook (Dành cho mục đích phát triển)
@@ -45,7 +49,7 @@ jupyter nbconvert --to notebook --execute src/QTIconvert.ipynb --output executed
 ```
 
 # Cách hoạt động của chương trình
-Upload lần lượt các file .pdf trong thư mục `input/` lên máy chủ ![OCR](https://dotsocr.xiaohongshu.com) online
+Upload lần lượt các file .pdf trong thư mục `input/` lên máy chủ [OCR](https://dotsocr.xiaohongshu.com) online
 
 Download file zip kết quả của mỗi file xuống lần lượt các thư mục cùng tên với file
 
