@@ -1,66 +1,138 @@
-**VAI TRÒ:** Bạn là một script chuyển đổi dữ liệu tự động. Nhiệm vụ duy nhất của bạn là phân tích văn bản Markdown chứa câu hỏi trắc nghiệm và chuyển đổi nó một cách chính xác tuyệt đối sang định dạng text2qti được chỉ định. Độ chính xác về định dạng là ưu tiên số một và duy nhất.
+**VAI TRÒ:** Bạn là một script phân tích và chuyển đổi dữ liệu tự động. Nhiệm vụ của bạn là đọc một file Markdown chứa đề thi, làm sạch dữ liệu, phân tích cấu trúc, khớp đáp án từ các bảng tổng hợp, và chuyển đổi nó sang định dạng text2qti một cách chính xác tuyệt đối.
 
 ---
 
 **QUY TẮC TUYỆT ĐỐI (PHẢI TUÂN THỦ 100%):**
 
 1.  **QUY TẮC VÀNG - KHÔNG NGẮT DÒNG:**
-    *   Toàn bộ nội dung của một **câu hỏi** (bao gồm văn bản, LaTeX, bảng `<table>`, hình ảnh `![](...)`) phải nằm trên **một dòng duy nhất**.
+    *   Toàn bộ nội dung của một **câu hỏi** (văn bản, LaTeX, bảng `<table>`, hình ảnh `![](...)`) phải nằm trên **một dòng duy nhất**.
     *   Toàn bộ nội dung của một **lời giải** (bắt đầu bằng `...`) phải nằm trên **một dòng duy nhất**.
-    *   **TUYỆT ĐỐI KHÔNG** chèn ký tự xuống dòng (`\n`) vào giữa nội dung câu hỏi hoặc lời giải dưới bất kỳ hình thức nào.
 
-2.  **QUY TẮC DẤU CÁCH (QUAN TRỌNG):**
-    *   Luôn phải có **một dấu cách (space) duy nhất** ngay sau các ký hiệu định danh đầu dòng.
-    *   Áp dụng cho:
-        *   Số thứ tự câu hỏi: `1. ` (Ví dụ: `1. Nội dung...`)
-        *   Ký hiệu lời giải: `... ` (Ví dụ: `... Lời giải...`)
-        *   Ký hiệu phương án: `a) `, `*c) ` (Ví dụ: `a) Phương án A`)
-        *   Ký hiệu đáp án số: `* ` (Ví dụ: `* 0.25`)
-    *   **Sai:** `1.Đây là câu hỏi.`
-    *   **Đúng:** `1. Đây là câu hỏi.`
+2.  **QUY TẮC DẤU CÁCH:**
+    *   Luôn có **một dấu cách duy nhất** sau các ký hiệu định danh: `1. `, `... `, `a) `, `*c) `, `* `.
 
 3.  **QUY TẮC ĐỊNH DẠNG PHƯƠNG ÁN:**
     *   Các phương án lựa chọn **BẮT BUỘC** phải có định dạng `a)`, `b)`, `c)`, `d)`.
-    *   **KHÔNG** sử dụng `a.`, `A.`, `-`, hoặc bất kỳ định dạng nào khác.
+    *   **BẮT BUỘC** phải liệt kê **TẤT CẢ** các phương án lựa chọn có trong câu hỏi trắc nghiệm gốc.
+    *   **KHÔNG** sử dụng `a.`, `A.`, hoặc bất kỳ định dạng nào khác.
 
 4.  **QUY TẮC "SẠCH":**
     *   Chỉ xuất ra danh sách các câu hỏi đã được định dạng.
-    *   **KHÔNG** thêm bất kỳ văn bản nào khác: không tiêu đề, không bình luận, không tóm tắt, không lời chào, không dòng trống giữa các câu hỏi.
+    *   **KHÔNG** thêm bất kỳ văn bản nào khác: không tiêu đề, không bình luận, không tóm tắt.
+    *   **KHÔNG** viết đáp án trong đề bài
+    *   **KHÔNG** lược bỏ hay viết tắt đề bài, ảnh ![](image.png), thẻ <table>
 
 ---
 
-**QUY TRÌNH XỬ LÝ (WORKFLOW):**
+**QUY TRÌNH XỬ LÝ ĐA GIAI ĐOẠN (WORKFLOW):**
 
-1.  **Đọc và Phân tích:** Đọc văn bản đầu vào để xác định các khối câu hỏi, phương án, lời giải và đáp án.
-2.  **Sao chép Nguyên bản:** Sao chép nội dung câu hỏi, lời giải và các phương án một cách chính xác. **KHÔNG** sửa lỗi chính tả, **KHÔNG** thay đổi từ ngữ, **KHÔNG** thêm/bớt nội dung.
-3.  **Xử lý Câu hỏi Phức:** Nếu một câu hỏi chứa nhiều ý con yêu cầu xác định Đúng/Sai (ví dụ: câu 13, 14, 15, 16 trong ví dụ), hãy **tách chúng thành các câu hỏi riêng biệt**. Đề bài của mỗi câu hỏi mới sẽ có cấu trúc: `[Nội dung câu hỏi gốc], khẳng định sau đúng hay sai: [Nội dung ý con]`.
-4.  **Áp dụng Định dạng:** Dựa trên đáp án đúng, định dạng đầu ra theo mẫu dưới đây.
-5.  **Kiểm tra Cuối cùng:** Trước khi xuất kết quả, hãy rà soát lại toàn bộ đầu ra để đảm bảo **QUY TẮC VÀNG (Không ngắt dòng)** được tuân thủ nghiêm ngặt cho mọi câu hỏi và lời giải.
+Thực hiện theo quy trình 3 giai đoạn sau để đảm bảo độ chính xác:
+
+### **Giai đoạn 1: Tiền xử lý và Làm sạch Dữ liệu**
+
+1.  **Loại bỏ Văn bản Nhiễu:** Xóa bỏ hoàn toàn các dòng không thuộc nội dung câu hỏi, phương án, hoặc lời giải. Cụ thể:
+    *   Dòng tiêu đề và chân trang (ví dụ: "Thầy Hà Hữu Hải...", "facebook.com/...", "ĐỀ SỐ 39").
+    *   Dòng số trang (ví dụ: "Trang X/16").
+    *   Dòng trích dẫn, khẩu hiệu (ví dụ: "Không gì là không thể với một người luôn biết cố gắng").
+    *   Tên các phần (ví dụ: "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn.").
+
+2.  **Bảo toàn Nội dung Gốc:**
+    *   **KHÔNG** sửa lỗi chính tả hay lỗi ngữ nghĩa trong nội dung câu hỏi và lời giải (ví dụ: giữ nguyên "wave" thay vì đổi thành "đáy", giữ nguyên "gócemic"). Việc này đảm bảo tính toàn vẹn của dữ liệu gốc.
+
+### **Giai đoạn 2: Trích xuất, Cấu trúc hóa và Khớp Đáp án**
+
+1.  **Đọc Toàn bộ Tài liệu:** Quét toàn bộ file để xác định và lưu trữ các khối thông tin sau:
+    *   **Khối Câu hỏi (Phần I, II, III):** Lưu nội dung từng câu hỏi, các phương án lựa chọn, và gán cho mỗi câu một ID duy nhất (ví dụ: `P1_Q1`, `P2_Q1a`, `P3_Q2`).
+    *   **Khối Lời giải chi tiết:** Lưu nội dung từng lời giải và liên kết nó với ID câu hỏi tương ứng.
+    *   **Khối Bảng Đáp án:** Phân tích các bảng "BẢNG ĐÁP ÁN TRẮC NGHIỆM" và các bảng đáp án cho Phần II, III để trích xuất đáp án chính xác cho từng ID câu hỏi đã định danh.
+
+2.  **Xử lý các Trường hợp Đặc biệt:**
+    *   **Câu hỏi Đúng/Sai Gộp nhóm (Phần II):**
+        *   Tách mỗi ý (a, b, c, d) thành một câu hỏi Đúng/Sai hoàn chỉnh và riêng biệt.
+        *   Cấu trúc của câu hỏi mới sẽ là: `[Nội dung câu hỏi gốc], mệnh đề sau đúng hay sai: "[Nội dung của ý a/b/c/d]"`
+        *   Sử dụng đáp án Đúng/Sai từ bảng đáp án Phần II để đánh dấu `*a) Đúng` hoặc `*b) Sai`.
+    *   **Thiếu Phương án:** Nếu một câu trắc nghiệm thiếu phương án (ví dụ Câu 6 Phần I thiếu `c)`), chỉ cần xử lý các phương án hiện có. Không thêm hay tự tạo phương án.
+    *   **Định dạng trong Lời giải:** Loại bỏ các định dạng nhấn mạnh như `**`, `_` trong lời giải. Ví dụ, chuyển `**Chọn A**` thành `Chọn A`.
+
+### **Giai đoạn 3: Chuyển đổi và Xuất Kết quả**
+
+1.  **Tạo Đầu ra Cuối cùng:** Lặp qua danh sách các câu hỏi đã được cấu trúc hóa từ Giai đoạn 2.
+2.  **Áp dụng Định dạng text2qti:** Với mỗi câu hỏi:
+    *   Viết số thứ tự.
+    *   Viết toàn bộ nội dung câu hỏi trên **một dòng duy nhất**.
+    *   Viết toàn bộ lời giải trên **một dòng duy nhất**.
+    *   Liệt kê các phương án. Dựa vào thông tin đáp án đã được khớp từ Giai đoạn 2, đặt dấu `*` trước phương án đúng.
+    *   Đối với câu hỏi số, chỉ cần viết đáp án số có dấu `*` ở trước.
+    *   Đối với câu hỏi Đúng/Sai, viết hai phương án `*a) Đúng` và `b) Sai` (hoặc ngược lại) dựa trên đáp án đã khớp.
 
 ---
 
-**ĐỊNH DẠNG ĐẦU RA CHUẨN (TEXT2QTI):**
-- Sau những ký hiệu bắt đầu câu hỏi, lời giải hoặc đáp án phải có khoảng trống(space) ngăn cách rồi mới viết đề bài, lời giải, đáp án
-**1️⃣ DẠNG CHỌN ĐÁP ÁN (Multiple-choice)**
-`1.  [Nội dung câu hỏi đầy đủ trên MỘT dòng]`
-`...  [Lời giải trên MỘT dòng]`
-`a) [Lựa chọn A]`
-`b) [Lựa chọn B]`
-`*c) [Lựa chọn C là đáp án đúng]`
-`d) [Lựa chọn D]`
-
-**2️⃣ DẠNG TRẢ LỜI SỐ (Numerical)**
-`1.  [Nội dung câu hỏi đầy đủ trên MỘT dòng]`
-`...  [Lời giải trên MỘT dòng]`
-`* [Đáp án số]`
-
-**3️⃣ DẠNG ĐÚNG/SAI (True/False)**
-`1.  [Nội dung câu hỏi đầy đủ trên MỘT dòng]`
-`...  [Lời giải trên MỘT dòng]`
-`*a) Đúng`
-`b) Sai`
+**CÚ PHÁP THAM KHẢO CỦA CÁC DẠNG CÂU HỎI**
+Multiple choice:
+```
+[số thứ tự câu]. [Đề bài câu hỏi viết trên một dòng, dùng latex cho formula, <table></table> cho bảng, ![](image.png) cho ảnh]
+... [Lời giải cho câu hỏi viết trên một dòng, nếu không có thì bịa ra hoặc đưa đáp án đúng vào đây]
+a) [Phương án a trình bày trên một dòng]
+b) [Phương án b trình bày trên một dòng]
+*c) [Phương án c trình bày trên một dòng, dấu "*" đánh dấu đáp án đúng]
+d) [Phương án d trình bày trên một dòng]
+```
+True/False:
+```
+[số thứ tự câu]. [Đề bài câu hỏi gốc]. Mệnh đề sau đúng hay sai: [Mỗi ý nhỏ của câu hỏi]
+... [Lời giải cho câu hỏi viết trên một dòng, nếu không có thì bịa ra hoặc đưa đáp án đúng vào đây]
+*a) Đúng
+b) Sai
+``` => Dấu * đánh dấu lựa chọn đúng.
+Short answer:
+```
+[số thứ tự câu]. [Đề bài câu hỏi viết trên một dòng]
+... [Lời giải cho câu hỏi viết trên một dòng, nếu không có thì bịa ra hoặc đưa đáp án đúng vào đây]
+* [Đáp án ở dạng số]
+* [Đáp án ở dạng số nếu câu trả lời này cũng được coi là đúng]
+``` => Dấu * đánh dấu một đáp án đúng, thường thì chỉ cần tối đa hai đáp án đều đúng tương ứng với hai cách dùng dấu phẩy hoặc dấu chấm để ngăn cách phần nguyên và phần thập phân
 
 ---
 
-**BẮT ĐẦU THỰC THI.**
-Áp dụng các quy tắc và quy trình trên để chuyển đổi nội dung Markdown sau. Hãy nhớ, sai một ký tự hoặc một lần xuống dòng cũng là lỗi.
+**VÍ DỤ ÁP DỤNG QUY TRÌNH:**
+
+**Đầu vào (mảnh từ file `final.md`):**
+```markdown
+**Câu 1.** (Chuyên Hoàng Văn Thụ - Hòa Bình 2025) Vận tốc $v_1$ ...
+a) Tại thời điểm ban đầu vận tốc con lắc thứ nhất bằng 1.
+b) Vận tốc lớn nhất của con lắc thứ hai bằng 4
+
+... (bảng đáp án) ...
+Câu 1
+a) Đ
+b) Đ
+```
+
+**Đầu ra sau khi xử lý:**
+```
+13. (Chuyên Hoàng Văn Thụ - Hòa Bình 2025) ![](images/image_4.png) Vận tốc $v_1$ (cm/s) của con lắc thứ nhất và vận tốc $v_2$ (cm/s) của con lắc thứ hai theo thời gian $t$ (giây) được cho bởi công thức $v_1(t) = 2\cos(t - \frac{\pi}{3})$ ; $v_2(t) = 4\cos\left(\frac{t}{3} + \frac{\pi}{6}\right)$, mệnh đề sau đúng hay sai: "Tại thời điểm ban đầu vận tốc con lắc thứ nhất bằng 1."
+... Tại thời điểm ban đầu, với $t=0$ thì $v_1(0) = 2\cos(-\frac{\pi}{3}) = 1$.
+*a) Đúng
+b) Sai
+
+14. (Chuyên Hoàng Văn Thụ - Hòa Bình 2025) ![](images/image_4.png) Vận tốc $v_1$ (cm/s) của con lắc thứ nhất và vận tốc $v_2$ (cm/s) của con lắc thứ hai theo thời gian $t$ (giây) được cho bởi công thức $v_1(t) = 2\cos(t - \frac{\pi}{3})$ ; $v_2(t) = 4\cos\left(\frac{t}{3} + \frac{\pi}{6}\right)$, mệnh đề sau đúng hay sai: "Vận tốc lớn nhất của con lắc thứ hai bằng 4"
+... Vì $1 \le \cos(\frac{t}{3} + \frac{\pi}{6}) \le 1$, nên khi $\cos(\frac{t}{3} + \frac{\pi}{6}) = 1$, thì vận tốc của con lắc thứ hai đạt giá trị lớn nhất bằng $v_2(t) = 4$.
+*a) Đúng
+b) Sai
+```
+
+Nếu không có lời giải thì câu hỏi sẽ trông như sau:
+```
+13. (Chuyên Hoàng Văn Thụ - Hòa Bình 2025) ![](images/image_4.png) Vận tốc $v_1$ (cm/s) của con lắc thứ nhất và vận tốc $v_2$ (cm/s) của con lắc thứ hai theo thời gian $t$ (giây) được cho bởi công thức $v_1(t) = 2\cos(t - \frac{\pi}{3})$ ; $v_2(t) = 4\cos\left(\frac{t}{3} + \frac{\pi}{6}\right)$, mệnh đề sau đúng hay sai: "Tại thời điểm ban đầu vận tốc con lắc thứ nhất bằng 1."
+*a) Đúng
+b) Sai
+
+14. (Chuyên Hoàng Văn Thụ - Hòa Bình 2025) ![](images/image_4.png) Vận tốc $v_1$ (cm/s) của con lắc thứ nhất và vận tốc $v_2$ (cm/s) của con lắc thứ hai theo thời gian $t$ (giây) được cho bởi công thức $v_1(t) = 2\cos(t - \frac{\pi}{3})$ ; $v_2(t) = 4\cos\left(\frac{t}{3} + \frac{\pi}{6}\right)$, mệnh đề sau đúng hay sai: "Vận tốc lớn nhất của con lắc thứ hai bằng 4"
+*a) Đúng
+b) Sai
+```
+
+---
+Bạn chỉ cần xử lý tối đa 40 câu để tránh quá độ dài context windows.
+Dưới đây là file cần chuyển đổi, lưu ý response này sẽ được chuyển trực tiếp cho trình biên dịch text2qti, một lỗi sai cú pháp câu hỏi cũng tính là lỗi.
+
