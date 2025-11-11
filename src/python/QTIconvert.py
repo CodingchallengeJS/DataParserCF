@@ -106,7 +106,7 @@ for folder in loading_folder:
                 #print(ask("hi"))
                 print(ask)
                 response = ask(prompt + "\n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
-                #response = ask(prompt_check + "\n\n" + response + "\n\n --- \n\n **Sau đây là tài liệu gốc để đối chiếu** \n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
+                response = ask(prompt_check + "\n\n" + response + "\n\n --- \n\n **Sau đây là tài liệu gốc để đối chiếu** \n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
             except Exception as e:
                 print("error prompting file", final_md_path, e)
                 continue
