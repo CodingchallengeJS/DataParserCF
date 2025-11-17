@@ -14,7 +14,8 @@
 6.  **KHÔNG TRÙNG LẶP CÂU HỎI:** Nội dung văn bản của mỗi câu hỏi phải là duy nhất trong toàn bộ file.
 7.  **KHÔNG TRÙNG LẶP PHƯƠNG ÁN:** Các phương án trong cùng một câu hỏi phải khác nhau.
 8.  **CÂU HỎI VÀ ĐÁP ÁN PHẢI KHÁC DÒNG:** Đáp án không được ở chung dòng với câu hỏi cũng như không được chung dòng với nhau.
-
+9.  **NỘI DUNG SAU KÝ HIỆU ĐẦU DÒNG KHÔNG ĐƯỢC ĐỂ TRỐNG: ** Sau các ký hiệu đầu dòng (`1. `, `... `, `a) `, `*c) `, `* ` không được phép bỏ trống, nếu trong tài liệu không có lời giải sau phần "..." thì xóa luôn dòng đánh dấu lời giải này.
+10. **TRONG CÂU HỎI KHÔNG TIẾT LỘ TRƯỚC LỜI GIẢI**
 ---
 
 **CÚ PHÁP THAM KHẢO CỦA CÁC DẠNG CÂU HỎI**
