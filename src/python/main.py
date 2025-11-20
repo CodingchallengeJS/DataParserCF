@@ -134,7 +134,7 @@ for folder in loading_folder:
 
             download_wait = WebDriverWait(driver, 1800)
             btn = download_wait.until(
-                EC.element_to_be_clickable((By.ID, "component-48"))
+                EC.element_to_be_clickable((By.ID, "component-49"))
             )
             print("Target download dir:", os.path.abspath(download_dir))
             print("Download button found, clicking...")
