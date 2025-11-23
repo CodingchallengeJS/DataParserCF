@@ -40,7 +40,7 @@ driver.get(
 )
 
 # --- Wait for Page to Load ---
-wait = WebDriverWait(driver, 60)
+wait = WebDriverWait(driver, 180)
 try:
     wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
     try:
@@ -111,7 +111,7 @@ for folder in loading_folder:
             print("Clicked parse button")
 
             try:
-                tab_btn = WebDriverWait(driver, 30).until(
+                tab_btn = WebDriverWait(driver, 180).until(
                     EC.element_to_be_clickable((By.ID, "component-42-button"))
                 )
                 tab_btn.click()
@@ -180,12 +180,12 @@ for folder in loading_folder:
             print("Merged pages into:", final_md_path)
 
             try:
-                clear_btn = WebDriverWait(driver, 30).until(
+                clear_btn = WebDriverWait(driver, 180).until(
                     EC.element_to_be_clickable((By.ID, "component-13"))
                 )
                 clear_btn.click()
                 print("Clicked Clear button")
-                WebDriverWait(driver, 30).until(
+                WebDriverWait(driver, 180).until(
                     EC.presence_of_element_located(
                         (By.CSS_SELECTOR, "input[type='file'][data-testid='file-upload']")
                     )
