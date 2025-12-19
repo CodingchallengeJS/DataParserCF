@@ -10,7 +10,6 @@ import time
 import requests
 from canvasapi import Canvas
 from dotenv import find_dotenv, load_dotenv
-from langchain_openai import ChatOpenAI
 
 # --- Load Environment Variables ---
 load_dotenv()
@@ -32,11 +31,9 @@ except Exception:
         ]
 
 # --- API Keys and Configuration ---
-api_key = os.getenv("OPENAI_API_KEY")
-api_base = os.getenv("OPENAI_API_BASE")
 model_name = os.getenv("OPENAI_MODEL_NAME")
 
-if not all([api_key, api_base, model_name]):
+if not all([model_name]):
     raise RuntimeError(
         "Check .env file and ensure that it exists and that OPENAI_API_KEY, "
         "OPENAI_API_BASE, and OPENAI_MODEL_NAME variables are set."
@@ -44,22 +41,24 @@ if not all([api_key, api_base, model_name]):
 
 API_URL = os.getenv("API_URL")
 API_KEY = os.getenv("API_KEY")
-API_BASE_URL = "https://api.cloudflare.com/client/v4/accounts/1db5d1059a3da11e28f027b8ba8a2f88/ai/run/"
-CLOUDFLARE_TOKEN = os.getenv("CLOUDFLARE_TOKEN")
 PART_USED = os.getenv("PART_USED")
 COURSE_ID = os.getenv("COURSE_ID")
 
 print(model_name)
 print(loading_folder)
-print(CLOUDFLARE_TOKEN)
 # --- Function to Ask OpenAI ---
-headers = {"Authorization": f"Bearer {CLOUDFLARE_TOKEN}"}
-def ask(inputs):
-    input = { 
-                "input": inputs
-            }
-    response = requests.post(f"{API_BASE_URL}@cf/openai/gpt-oss-120b", headers=headers, json=input)
-    return response.json()
+def ask(prompt):
+    gemini_cmd = r'C:\Users\QUANG TRUNG\AppData\Roaming\npm\gemini.cmd'
+    cmd = [
+        gemini_cmd,
+        "-m", model_name,
+        "-p", "-",
+        "--output-format", "json"
+    ]
+    #print(" ".join(cmd))
+    
+    result = subprocess.run(cmd, input=prompt, capture_output=True, text=True, encoding='utf-8')
+    return json.loads(result.stdout)
 
 # --- Prompt Loading ---
 prompt = None
@@ -103,10 +102,9 @@ for folder in loading_folder:
                     with open(alt_md_path, "r", encoding="utf-8") as f:
                         final_md_str = f.read()
             try: 
-                #print(ask("hi"))
                 print(ask)
-                response = ask(prompt + "\n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
-                response = ask(prompt_check + "\n\n" + response + "\n\n --- \n\n **Sau đây là tài liệu gốc để đối chiếu** \n\n" + final_md_str)['result']['output'][1]['content'][0]['text']
+                response = ask(prompt + "\n\n" + final_md_str)['response']
+                response = ask(prompt_check + "\n\n" + response + "\n\n --- \n\n **Sau đây là tài liệu gốc để đối chiếu** \n\n" + final_md_str)['response']
             except Exception as e:
                 print("error prompting file", final_md_path, e)
                 continue
@@ -144,6 +142,17 @@ for folder in loading_folder:
                     else:
                         text = str(response)
 
+            try:
+                if isinstance(text, str):
+                    lines = text.splitlines()
+                    if len(lines) >= 2 and lines[0].strip().startswith("```") and lines[-1].strip().startswith("```"):
+                        text = "\n".join(lines[1:-1])
+                    elif lines and lines[0].strip().startswith("```"):
+                        text = "\n".join(lines[1:])
+                    elif lines and lines[-1].strip().startswith("```"):
+                        text = "\n".join(lines[:-1])
+            except Exception:
+                pass
             with open(out_path, "w", encoding="utf-8") as out_f:
                 out_f.write(text or "")
 
