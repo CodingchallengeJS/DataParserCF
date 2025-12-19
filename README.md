@@ -15,6 +15,8 @@ Trong thư mục output này, file final.md là ghép tất cả các trang
 python -m pip install -r requirements.txt
 ```
 
+Chúng tôi ở đây dùng [Gemini CLI](https://github.com/google-gemini/gemini-cli) làm API để chuyển đổi dữ liệu raw sang format text2qti, hãy chắc chắn bạn đã cài đặt gemini cli theo hướng dẫn [này](https://github.com/google-gemini/gemini-cli)
+
 ## Chạy bằng Python
 
 File chính ở đây là `main.py`
